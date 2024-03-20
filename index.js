@@ -7,7 +7,7 @@ const PORT = 8000
 const app = express()
 
 app.use(cors({
-  origin: process.env.FRONTEND_ORIGIN,
+  origin: ["https://codemit.vercel.app/", "https://codemit.vercel.app"],
   optionsSuccessStatus: 200,
   credentials: true,
 }))
