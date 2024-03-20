@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express")
 const codeSubmissionRouter = require("./router/codeSubmissions.router")
 const cors = require("cors")
@@ -5,7 +6,9 @@ const PORT = 8000
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: process.env.FRONTEND_ORIGIN
+}))
 app.use(express.json())
 
 app.use("/api/codesubmission", codeSubmissionRouter)
