@@ -12,30 +12,34 @@ const db = {
 function createTable() {
   return new Promise((resolve, reject) => {
     const connection = createConnection(db);
-
-    connection.query("SHOW TABLES LIKE 'code_submissions'", (err, result) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      } else {
-        if (result.length === 0) {
-          connection.query(createCodeSubmissionTableQuery, (err) => {
-            if (err) {
-              console.error(err);
-              reject(err);
-            } else {
-              console.log("Table Created Successfully");
-              resolve(true);
-            }
-            connection.end();
-          });
+    try {
+      connection.query("SHOW TABLES LIKE 'code_submissions'", (err, result) => {
+        if (err) {
+          console.error(err);
+          reject(err);
         } else {
-          console.log("Table already exists");
-          resolve(true);
-          connection.end();
+          if (result.length === 0) {
+            connection.query(createCodeSubmissionTableQuery, (err) => {
+              if (err) {
+                console.error(err);
+                reject(err);
+              } else {
+                console.log("Table Created Successfully");
+                resolve(true);
+              }
+              connection.end();
+            });
+          } else {
+            console.log("Table already exists");
+            resolve(true);
+            connection.end();
+          }
         }
-      }
-    });
-  });
+      })
+    } catch (err) {
+      console.log(err)
+      resolve(true)
+    }
+  })
 }
 module.exports = { db, createTable }

@@ -1,4 +1,4 @@
-const createCodeSubmissionTableQuery = `CREATE TABLE submissions (
+const createCodeSubmissionTableQuery = `CREATE TABLE code_submissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     code_language ENUM('C++', 'Java', 'JavaScript', 'Python') NOT NULL,
