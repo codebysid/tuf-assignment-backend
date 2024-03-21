@@ -1,12 +1,19 @@
 const { createConnection } = require("mysql2")
-const { db } = require("../utils/connectToMysql")
+const { db, createTable } = require("../utils/connectToMysql")
 const { readSubmissionsQuery, saveToSqlQuery } = require("../queries/codeSubmission")
 
 async function saveCodeSubmission(req, res) {
   const { username, sourceCode, codeLanguage, stdIn } = req.body
   if (!username || !sourceCode || !codeLanguage) throw new Error("Details required")
   try {
-    createConnection(db).query(saveToSqlQuery, [username, codeLanguage, sourceCode, stdIn], (err) => {
+    const status = await createTable()
+    if (!status) {
+      console.log("error in status of table in controllers")
+      return
+    }
+    const connection = createConnection(db)
+    connection.query(saveToSqlQuery, [username, codeLanguage, sourceCode, stdIn], (err) => {
+      connection.end()
       if (err) {
         console.log(err)
         return res.status(402)
@@ -21,7 +28,14 @@ async function saveCodeSubmission(req, res) {
 
 async function readCodeSubmissions(req, res) {
   try {
-    createConnection(db).query(readSubmissionsQuery, (err, result) => {
+    const status = await createTable()
+    if (!status) {
+      console.log("error in status of table in controllers")
+      return
+    }
+    const connection = createConnection(db)
+    connection.query(readSubmissionsQuery, (err, result) => {
+      connection.end()
       if (err) {
         console.log(err)
         return res.status(402)
